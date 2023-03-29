@@ -1,4 +1,5 @@
 #include "binary_trees.h"
+#include <math.h>
 
 /**
  * check_bst - helper function to recursively
@@ -64,34 +65,25 @@ int binary_tree_is_bst(const binary_tree_t *tree)
 /**
  * binary_tree_is_avl - Checks if a binary tree is a valid AVL tree
  * @tree: Pointer to the root node of the tree to check
- *
  * Return: 1 if the tree is a valid AVL tree, 0 otherwise
  */
+
 int binary_tree_is_avl(const binary_tree_t *tree)
 {
-	int balance_factor, lh, rh;
-
 	if (!tree)
 		return (1);
 
-	lh = binary_tree_height(tree->left);
-	rh = binary_tree_height(tree->right);
+	int lh = binary_tree_height(tree->left);
+	int rh = binary_tree_height(tree->right);
+	int balance_factor = abs(lh - rh);
 
-	if (abs(lh - rh) > 1)
+	if (balance_factor >= 1)
 		return (0);
 
 	if (!binary_tree_is_bst(tree))
 		return (0);
 
-	if (!binary_tree_is_avl(tree->left))
-		return (0);
-
-	if (!binary_tree_is_avl(tree->right))
-		return (0);
-
-	balance_factor = abs(lh - rh);
-
-	if (balance_factor >= 1)
+	if (!binary_tree_is_avl(tree->left) || !binary_tree_is_avl(tree->right))
 		return (0);
 
 	return (1);
