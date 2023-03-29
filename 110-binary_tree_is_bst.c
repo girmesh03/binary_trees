@@ -1,5 +1,4 @@
 #include "binary_trees.h"
-#include <limits.h>
 
 /**
  * check_bst - helper function to recursively
