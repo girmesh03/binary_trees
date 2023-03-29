@@ -69,12 +69,14 @@ int binary_tree_is_bst(const binary_tree_t *tree)
 
 int binary_tree_is_avl(const binary_tree_t *tree)
 {
+	int lh, rh, balance_factor;
+
 	if (!tree)
 		return (1);
 
-	int lh = binary_tree_height(tree->left);
-	int rh = binary_tree_height(tree->right);
-	int balance_factor = abs(lh - rh);
+	lh = binary_tree_height(tree->left);
+	rh = binary_tree_height(tree->right);
+	balance_factor = abs(lh - rh);
 
 	if (balance_factor >= 1)
 		return (0);
@@ -82,7 +84,8 @@ int binary_tree_is_avl(const binary_tree_t *tree)
 	if (!binary_tree_is_bst(tree))
 		return (0);
 
-	if (!binary_tree_is_avl(tree->left) || !binary_tree_is_avl(tree->right))
+	if (!binary_tree_is_avl(tree->left) ||
+		!binary_tree_is_avl(tree->right))
 		return (0);
 
 	return (1);
