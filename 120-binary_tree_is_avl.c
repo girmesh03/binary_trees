@@ -76,9 +76,9 @@ int binary_tree_is_avl(const binary_tree_t *tree)
 
 	lh = binary_tree_height(tree->left);
 	rh = binary_tree_height(tree->right);
-	balance_factor = abs(lh - rh);
+	balance_factor = lh - rh;
 
-	if (balance_factor >= 1)
+	if (balance_factor >= 1 && balance_factor <= -1)
 		return (0);
 
 	if (!binary_tree_is_bst(tree))
