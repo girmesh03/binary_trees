@@ -1,52 +1,71 @@
 #include "binary_trees.h"
 
 /**
- * binary_tree_is_complete_aux - auxiliary function to
- * check if a binary tree is complete
- * @tree: pointer to the root node of the tree to check
- * @index: index of the current node
- * @size: size of the binary tree
- * Return: 1 if complete, 0 otherwise
+ * binary_tree_height - measures the height of a binary tree
+ * @tree: pointer to the root node of the tree to measure the height.
+ * Return: height of the tree
  */
-int binary_tree_is_complete_aux(const binary_tree_t *tree, int index, int size)
-{
-	if (tree == NULL)
-		return (1);
 
-	if (index >= size)
+size_t binary_tree_height(const binary_tree_t *tree)
+{
+	size_t left_height = 0, right_height = 0;
+
+	if (tree == NULL)
 		return (0);
 
-	return (binary_tree_is_complete_aux(tree->left, 2 * index + 1, size) &&
-			binary_tree_is_complete_aux(tree->right, 2 * index + 2, size));
+	if (tree->left != NULL)
+		left_height = binary_tree_height(tree->left) + 1;
+
+	if (tree->right != NULL)
+		right_height = binary_tree_height(tree->right) + 1;
+
+	if (left_height > right_height)
+		return (left_height);
+	else
+		return (right_height);
 }
 
 /**
- * binary_tree_size - measures the size of a binary tree
- * @tree: pointer to the root node of the tree to measure the size of
- *
- * Return: size of the tree, or 0 if tree is NULL
+ * binary_tree_is_full - checks if a binary tree is full
+ * @tree: pointer to the root node of the tree to check
+ * Return: 1 if tree is full, otherwise 0
  */
-size_t binary_tree_size(const binary_tree_t *tree)
+
+int binary_tree_is_full(const binary_tree_t *tree)
 {
 	if (tree == NULL)
 		return (0);
-	return (1 + binary_tree_size(tree->left) + binary_tree_size(tree->right));
+	if (tree->left == NULL && tree->right == NULL)
+		return (1);
+	if (tree->left != NULL && tree->right != NULL)
+		return (binary_tree_is_full(tree->left) &&
+				binary_tree_is_full(tree->right));
+	return (0);
 }
 
 /**
  * binary_tree_is_complete - checks if a binary tree is complete
  * @tree: pointer to the root node of the tree to check
- * Return: 1 if complete, 0 if not or if tree is NULL
+ * Return: 1 if complete, 0 otherwise
  */
+
 int binary_tree_is_complete(const binary_tree_t *tree)
 {
-	int size = 0;
-	int index = 0;
+	int left_height = 0, right_height = 0;
 
 	if (tree == NULL)
 		return (0);
 
-	size = binary_tree_size(tree);
+	if (tree->left != NULL)
+		left_height = binary_tree_height(tree->left) + 1;
 
-	return (binary_tree_is_complete_aux(tree, index, size));
+	if (tree->right != NULL)
+		right_height = binary_tree_height(tree->right) + 1;
+
+	if (left_height == right_height)
+		return (binary_tree_is_full(tree));
+	else if (left_height == right_height + 1)
+		return (binary_tree_is_complete(tree->left));
+	else
+		return (0);
 }
