@@ -15,7 +15,8 @@ size_t binary_tree_size(const binary_tree_t *tree)
 }
 
 /**
- * binary_tree_is_complete_aux - Checks if a binary tree is complete recursively.
+ * binary_tree_is_complete_aux - Checks if a
+ * binary tree is complete recursively.
  * @tree: A pointer to the root node of the tree to check.
  * @index: The index of the current node.
  * @size: The size of the binary tree.
