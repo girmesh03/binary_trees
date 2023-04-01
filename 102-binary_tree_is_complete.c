@@ -61,7 +61,7 @@ int binary_tree_is_complete(const binary_tree_t *tree)
 
 	/* take account of nodes with only one child */
 	if (tree->left && !tree->right)
-		return (0);
+		return (binary_tree_is_complete(tree->left));
 
 	/* take account of nodes with two children */
 	if (tree->left && tree->right)
