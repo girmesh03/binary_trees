@@ -58,9 +58,10 @@ void binary_tree_levelorder(const binary_tree_t *tree, void (*func)(int))
 	if (tree == NULL || func == NULL)
 		return;
 
-	depth = binary_tree_depth(tree->left) + binary_tree_depth(tree->right);
+	depth = 1 + (binary_tree_depth(tree->left) +
+				 binary_tree_depth(tree->right));
 
-	while (index <= depth)
+	while (index < depth)
 	{
 		print_level(tree, index, func);
 		index++;
