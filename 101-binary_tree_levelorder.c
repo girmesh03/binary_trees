@@ -1,28 +1,25 @@
 #include "binary_trees.h"
 
 /**
- * binary_tree_height - measures the height of a binary tree
- * @tree: pointer to the root node of the tree to measure the height.
- * Return: height of the tree
+ * binary_tree_depth - measures the depth of a node in a binary tree
+ * @tree: pointer to the node to measure the depth
+ * Return: depth of the node
  */
 
-size_t binary_tree_height(const binary_tree_t *tree)
+size_t binary_tree_depth(const binary_tree_t *tree)
 {
-	size_t left_height = 0, right_height = 0;
+	size_t depth = 0;
 
 	if (tree == NULL)
 		return (0);
 
-	if (tree->left != NULL)
-		left_height = binary_tree_height(tree->left) + 1;
+	while (tree->parent != NULL)
+	{
+		depth++;
+		tree = tree->parent;
+	}
 
-	if (tree->right != NULL)
-		right_height = binary_tree_height(tree->right) + 1;
-
-	if (left_height > right_height)
-		return (left_height);
-	else
-		return (right_height);
+	return (depth);
 }
 
 /**
@@ -56,13 +53,16 @@ void print_level(const binary_tree_t *tree, size_t level, void (*func)(int))
 
 void binary_tree_levelorder(const binary_tree_t *tree, void (*func)(int))
 {
-	size_t height, i;
+	size_t depth = 0, index = 0;
 
 	if (tree == NULL || func == NULL)
 		return;
 
-	height = binary_tree_height(tree);
+	depth = binary_tree_depth(tree->left) + binary_tree_depth(tree->right);
 
-	for (i = 0; i <= height; i++)
-		print_level(tree, i, func);
+	while (index <= depth)
+	{
+		print_level(tree, index, func);
+		index++;
+	}
 }
