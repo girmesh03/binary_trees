@@ -8,10 +8,14 @@
 
 binary_tree_t *binary_tree_sibling(binary_tree_t *node)
 {
+	/* if the the tree is empty or the node is the root, return NULL */
 	if (node == NULL || node->parent == NULL)
 		return (NULL);
-	if (node->parent->left == node)
-		return (node->parent->right);
-	else
+
+	/* if the node is a right child of its parent, */
+	/* then return the left child of its parent */
+	if (node->parent->right == node)
 		return (node->parent->left);
+	/* otherwise, it's sibling is the right child of its parent */
+	return (node->parent->right);
 }
