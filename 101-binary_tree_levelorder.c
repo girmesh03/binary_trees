@@ -1,25 +1,28 @@
 #include "binary_trees.h"
 
 /**
- * binary_tree_depth - measures the depth of a node in a binary tree
- * @tree: pointer to the node to measure the depth
- * Return: depth of the node
+ * binary_tree_height - measures the height of a binary tree
+ * @tree: pointer to the root node of the tree to measure the height.
+ * Return: height of the tree
  */
 
-size_t binary_tree_depth(const binary_tree_t *tree)
+size_t binary_tree_height(const binary_tree_t *tree)
 {
-	size_t depth = 0;
+	size_t left_height, right_height;
 
 	if (tree == NULL)
 		return (0);
 
-	while (tree->parent != NULL)
-	{
-		depth++;
-		tree = tree->parent;
-	}
+	if (tree->left == NULL && tree->right == NULL)
+		return (0);
 
-	return (depth);
+	left_height = 1 + binary_tree_height(tree->left);
+	right_height = 1 + binary_tree_height(tree->right);
+
+	if (left_height > right_height)
+		return (left_height);
+	else
+		return (right_height);
 }
 
 /**
@@ -30,17 +33,17 @@ size_t binary_tree_depth(const binary_tree_t *tree)
  * Return: nothing
  */
 
-void print_level(const binary_tree_t *tree, size_t level, void (*func)(int))
+void print_level(const binary_tree_t *tree, void (*func)(int), size_t level)
 {
 	if (tree == NULL)
 		return;
 
 	if (level == 0)
 		func(tree->n);
-	else
+	else if (level > 0)
 	{
-		print_level(tree->left, level - 1, func);
-		print_level(tree->right, level - 1, func);
+		print_level(tree->left, func, level - 1);
+		print_level(tree->right, func, level - 1);
 	}
 }
 
@@ -53,17 +56,9 @@ void print_level(const binary_tree_t *tree, size_t level, void (*func)(int))
 
 void binary_tree_levelorder(const binary_tree_t *tree, void (*func)(int))
 {
-	size_t depth = 0, index = 0;
+	size_t height = binary_tree_height(tree);
+	size_t level;
 
-	if (tree == NULL || func == NULL)
-		return;
-
-	depth = 1 + (binary_tree_depth(tree->left) +
-				 binary_tree_depth(tree->right));
-
-	while (index < depth)
-	{
-		print_level(tree, index, func);
-		index++;
-	}
+	for (level = 0; level <= height; level++)
+		print_level(tree, func, level);
 }
