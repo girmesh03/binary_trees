@@ -29,31 +29,26 @@ size_t binary_tree_depth(const binary_tree_t *tree)
  * Return: pointer to the lowest common ancestor node of the two given nodes
  */
 
-binary_tree_t *binary_trees_ancestor(const binary_tree_t *first,
-									 const binary_tree_t *second)
+binary_tree_t *binary_trees_ancestor(
+	const binary_tree_t *first, const binary_tree_t *second)
 {
-	size_t first_depth, second_depth;
+	binary_tree_t *right_ancestor, *left_ancestor;
 
-	if (first == NULL || second == NULL)
+	if (!first || !second)
 		return (NULL);
 
-	first_depth = binary_tree_depth(first);
-	second_depth = binary_tree_depth(second);
+	if (first == second || first == second->parent)
+		return ((binary_tree_t *)first);
+	if (second == first->parent)
+		return ((binary_tree_t *)second);
 
-	while (first_depth > second_depth)
-	{
-		first = first->parent;
-		first_depth--;
-	}
-	while (second_depth > first_depth)
-	{
-		second = second->parent;
-		second_depth--;
-	}
-	while (first != second)
-	{
-		first = first->parent;
-		second = second->parent;
-	}
-	return ((binary_tree_t *)first);
+	right_ancestor = binary_trees_ancestor(first, second->parent);
+	left_ancestor = binary_trees_ancestor(first->parent, second);
+
+	if (right_ancestor)
+		return (right_ancestor);
+	else if (left_ancestor)
+		return (left_ancestor);
+	else
+		return (NULL);
 }
