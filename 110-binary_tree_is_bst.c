@@ -15,9 +15,13 @@ int is_bst(const binary_tree_t *node, int min, int max)
 	if (node == NULL)
 		return (1);
 
-	/* if the following conditions are met, the tree is a valid BST */
-	/* 1. check the node value is in b/n min and max range */
-	/* 2. check the left subtree and right subtree is a valid BST */
+	/**
+	 * if the following conditions are met,
+	 * the tree is a valid BST so return 1 otherwise return 0
+	 * 1. node value is in b/n min and max range
+	 * 2. left subtree is a valid BST
+	 * 3. right subtree is a valid BST
+	 */
 	if ((node->n > min && node->n < max) &&
 		(is_bst(node->left, min, node->n)) &&
 		(is_bst(node->right, node->n, max)))
