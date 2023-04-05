@@ -1,46 +1,95 @@
 #include "binary_trees.h"
-#include "102-binary_tree_is_complete.c"
-/**
- * check_max - goes through a binary tree cheking ropt as max value
- * @tree: pointer to the root
- * Return: 1 if all nodes are max, 0 in other cases
- **/
-int check_max(const binary_tree_t *tree)
-{
-	int tmp1 = 1, tmp2 = 1;
 
-	if (!tree)
-		return (0);
-	if (!tree->left && !tree->right)
-		return (1);
-	if (tree->left)
-	{
-		if (tree->n <= tree->left->n)
-			return (0);
-		tmp1 = check_max(tree->left);
-	}
-	if (tree->right)
-	{
-		if (tree->n <= tree->right->n)
-			return (0);
-		tmp2 = check_max(tree->right);
-	}
-	return (tmp1 && tmp2);
-}
 /**
- * binary_tree_is_heap - checks if a binary tree is heap
- * @tree: pointer to the node
- * Return: 1 in case BTS /  0 otherwise
- **/
+ * binary_tree_size - Measures the size of a binary tree.
+ * @tree: A pointer to the root node of the tree to measure the size of.
+ *
+ * Return: The size of the tree.
+ */
+size_t binary_tree_size(const binary_tree_t *tree)
+{
+	if (tree == NULL)
+		return (0);
+
+	return (binary_tree_size(tree->left) + 1 + binary_tree_size(tree->right));
+}
+
+/**
+ * binary_tree_is_complete_aux - Checks if a
+ * binary tree is complete recursively.
+ * @tree: A pointer to the root node of the tree to check.
+ * @index: The index of the current node.
+ * @size: The size of the binary tree.
+ *
+ * Return: 1 if the binary tree is complete, otherwise 0.
+ */
+int binary_tree_is_complete_aux(
+	const binary_tree_t *tree, int index, int size)
+{
+	if (tree == NULL)
+		return (1);
+
+	if (index >= size)
+		return (0);
+
+	return (binary_tree_is_complete_aux(tree->left, 2 * index + 1, size) &&
+			binary_tree_is_complete_aux(tree->right, 2 * index + 2, size));
+}
+
+/**
+ * binary_tree_is_complete - Checks if a binary tree is complete.
+ * @tree: A pointer to the root node of the tree to check.
+ *
+ * Return: 1 if the binary tree is complete, otherwise 0.
+ */
+int binary_tree_is_complete(const binary_tree_t *tree)
+{
+	int size = 0;
+	int index = 0;
+
+	if (tree == NULL)
+		return (0);
+
+	size = binary_tree_size(tree);
+
+	return (binary_tree_is_complete_aux(tree, index, size));
+}
+
+/**
+ * binary_tree_is_heap - Checks if a binary tree is a valid Max Binary Heap.
+ * @tree: A pointer to the root node of the tree to check.
+ *
+ * Return: 1 if tree is a valid Max Binary Heap, and 0 otherwise.
+ */
 int binary_tree_is_heap(const binary_tree_t *tree)
 {
-	int tmp;
-
-	if (!tree)
+	if (tree == NULL)
 		return (0);
 
-	tmp = binary_tree_is_complete(tree);
-	if (!tmp)
-		return (0);
-	return (check_max(tree));
+	if (tree->left == NULL && tree->right == NULL)
+		return (1);
+
+	if (tree->right == NULL)
+	{
+		if (tree->n >= tree->left->n)
+			return (binary_tree_is_heap(tree->left));
+		else
+			return (0);
+	}
+
+	if (tree->left == NULL)
+	{
+		if (tree->n >= tree->right->n)
+			return (binary_tree_is_heap(tree->right));
+		else
+			return (0);
+	}
+	else
+	{
+		if (binary_tree_is_complete(tree))
+			return (binary_tree_is_heap(tree->left) &&
+					binary_tree_is_heap(tree->right));
+		else
+			return (0);
+	}
 }
