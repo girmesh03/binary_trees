@@ -86,7 +86,8 @@ int binary_tree_is_heap(const binary_tree_t *tree)
 	}
 	else
 	{
-		if (binary_tree_is_complete(tree))
+		if (binary_tree_is_complete(tree) &&
+			tree->n >= tree->left->n && tree->n >= tree->right->n)
 			return (binary_tree_is_heap(tree->left) &&
 					binary_tree_is_heap(tree->right));
 		else
