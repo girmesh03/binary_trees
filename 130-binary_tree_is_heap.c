@@ -71,18 +71,12 @@ int binary_tree_is_heap(const binary_tree_t *tree)
 	if (tree->left == NULL && tree->right == NULL)
 		return (1);
 
-	if (tree->right == NULL && tree->left != NULL)
-	{
-		if (tree->n >= tree->left->n)
-			return (binary_tree_is_heap(tree->left));
-		else
-			return (0);
-	}
+	if ((binary_tree_is_complete(tree) && tree->n >= tree->left->n &&
+		 tree->n >= tree->right->n) ||
+		(binary_tree_is_complete(tree) && (tree->n >= tree->left->n)))
 
-	if (binary_tree_is_complete(tree) &&
-		tree->n >= tree->left->n && tree->n >= tree->right->n)
 		return (binary_tree_is_heap(tree->left) &&
 				binary_tree_is_heap(tree->right));
-	else
-		return (0);
+
+	return (0);
 }
