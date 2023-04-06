@@ -25,48 +25,45 @@ size_t binary_tree_size(const binary_tree_t *tree)
 
 heap_t *heap_insert(heap_t **root, int value)
 {
-	heap_t *new_node = NULL, *current;
-	size_t size = 0;
+	heap_t *tree, *new, *flip;
+	int size, leaves, sub, bit, level, tmp;
 
 	if (!root)
 		return (NULL);
+	if (!(*root))
+		return (*root = binary_tree_node(NULL, value));
+	tree = *root;
+	size = binary_tree_size(tree);
+	printf("size: %d\n", size);
+	leaves = size;
+	for (level = 0, sub = 1; leaves >= sub; sub *= 2, level++)
+		leaves -= sub;
+	/* subtract all nodes except for bottom-most level */
 
-	if (!*root)
-	{
-		*root = binary_tree_node(NULL, value);
-		return (*root);
-	}
+	for (bit = 1 << (level - 1); bit != 1; bit >>= 1)
+		tree = leaves & bit ? tree->right : tree->left;
+	/*
+	 * Traverse tree to first empty slot based on the binary
+	 * representation of the number of leaves.
+	 * Example -
+	 * If there are 12 nodes in a complete tree, there are 5 leaves on
+	 * the 4th tier of the tree. 5 is 101 in binary. 1 corresponds to
+	 * right, 0 to left.
+	 * The first empty node is 101 == RLR, *root->right->left->right
+	 */
 
-	current = *root;
-	while (current)
+	new = binary_tree_node(tree, value);
+	leaves & 1 ? (tree->right = new) : (tree->left = new);
+
+	flip = new;
+	for (; flip->parent && (flip->n > flip->parent->n); flip = flip->parent)
 	{
-		size = binary_tree_size(current->left);
-		if (size == binary_tree_size(current->right))
-		{
-			if (!current->left)
-			{
-				new_node = binary_tree_node(current, value);
-				current->left = new_node;
-				break;
-			}
-			current = current->left;
-		}
-		else
-		{
-			if (!current->right)
-			{
-				new_node = binary_tree_node(current, value);
-				current->right = new_node;
-				break;
-			}
-			current = current->right;
-		}
+		tmp = flip->n;
+		flip->n = flip->parent->n;
+		flip->parent->n = tmp;
+		new = new->parent;
 	}
-	while (new_node->parent && new_node->n > new_node->parent->n)
-	{
-		new_node->n = new_node->parent->n;
-		new_node->parent->n = value;
-		new_node = new_node->parent;
-	}
-	return (new_node);
+	/* Flip values with parent until parent value exceeds new value */
+
+	return (new);
 }
