@@ -3,14 +3,21 @@
 /**
  * binary_tree_size - Measures the size of a binary tree.
  * @tree: A pointer to the root node of the tree to measure the size.
- *
  * Return: The size of the tree.
  */
 size_t binary_tree_size(const binary_tree_t *tree)
 {
+	/**
+	 * If tree is NULL, i.e. the tree is empty, or if the tree is a leaf node,
+	 * return 0.
+	 */
 	if (tree == NULL)
 		return (0);
 
+	/**
+	 * Recursively calculate the number of nodes in the left and right
+	 * subtrees, and add 1 to account for the current node.
+	 */
 	return (1 + (binary_tree_size(tree->left) +
 				 binary_tree_size(tree->right)));
 }
@@ -20,19 +27,25 @@ size_t binary_tree_size(const binary_tree_t *tree)
  * @tree: A pointer to the root node of the tree to check.
  * @size: The size of the tree.
  * @index: The current index of the node.
- *
  * Return: 1 if tree is complete, 0 otherwise.
  */
 int is_complete(const binary_tree_t *tree, size_t size, size_t index)
 {
+	/**
+	 * If the tree is empty, or if the current node reaches the end of the
+	 * tree, return 1.
+	 */
 	if (tree == NULL)
 		return (1);
 
-	/* Check if the current node is within the size of the tree */
+	/**
+	 * Check if the current node is within the total number of nodes in the
+	 * tree. If not, the tree is not complete. Return 0.
+	 */
 	if (index >= size)
 		return (0);
 
-	/* Recursively check the left and right subtrees */
+	/* Recursively check if the left and right subtrees are complete. */
 	return (is_complete(tree->left, size, 2 * index + 1) &&
 			is_complete(tree->right, size, 2 * index + 2));
 }
@@ -40,13 +53,13 @@ int is_complete(const binary_tree_t *tree, size_t size, size_t index)
 /**
  * binary_tree_is_complete - Checks if a binary tree is complete.
  * @tree: A pointer to the root node of the tree to check.
- *
  * Return: 1 if tree is complete, 0 otherwise.
  */
 int binary_tree_is_complete(const binary_tree_t *tree)
 {
 	size_t size = 0;
 
+	/* If the tree is empty, return 0. */
 	if (tree == NULL)
 		return (0);
 
