@@ -6,7 +6,8 @@
  * Return: height of the tree
  *
  * Note: height of a tree is height of root node, height of a node is the
- * number of edges from root to leaf node and height of a leaf node is 0
+ * the longest path from current node to leaf node.
+ * and height of a leaf node is 0
  */
 size_t binary_tree_height(const binary_tree_t *tree)
 {
