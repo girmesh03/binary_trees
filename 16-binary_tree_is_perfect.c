@@ -40,18 +40,17 @@ size_t binary_tree_height(const binary_tree_t *tree)
  */
 int binary_tree_is_perfect(const binary_tree_t *tree)
 {
+	/* if tree is NULL, return 0 */
 	if (tree == NULL)
 		return (0);
 
+	/* a leaf node is a perfect node, so return 1 */
 	if (tree->left == NULL && tree->right == NULL)
 		return (1);
 
-	if (tree->left != NULL && tree->right != NULL)
-	{
-		return ((binary_tree_is_perfect(tree->left) &&
-				 binary_tree_is_perfect(tree->right)) &&
-				(binary_tree_height(tree->left) ==
-				 binary_tree_height(tree->right)));
-	}
-	return (0);
+	/* if left and right subtrees are perfect and their heights are equal */
+	return ((binary_tree_is_perfect(tree->left) &&
+			 binary_tree_is_perfect(tree->right)) &&
+			(binary_tree_height(tree->left) ==
+			 binary_tree_height(tree->right)));
 }
